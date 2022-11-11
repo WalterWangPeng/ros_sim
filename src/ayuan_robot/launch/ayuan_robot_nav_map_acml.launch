@@ -1,0 +1,13 @@
+<launch>
+    <!-- Run the map server --> 
+    <!-- <node pkg="tf" type="static_transform_publisher" name="base_to_link" args="0 0 0 0 0 0 base_footprint base_link 100" /> -->
+   <arg name="map_file" default="$(find ayuan_gazebo)/map/home_1.yaml"/>
+   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
+   
+   <arg name="use_map_topic" default="false"/>
+   <arg name="scan_topic" default="scan"/>
+   
+   <!--- Run AMCL --> 
+   <include file="$(find amcl)/examples/amcl_diff.launch" />
+
+</launch> 
