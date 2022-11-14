@@ -20,7 +20,7 @@ tmux send-keys -t rossim_mapping:sim.0 'roscore' C-m
 echo "please wait 1 seconds for next step.."
 sleep 1
 echo "now start rviz"
-tmux send-keys -t rossim_mapping:sim.1 'source hy_route/learn/ros_sim/devel/setup.bash && roslaunch ayuan_robot ayuan_robot_slam_sim.launch' C-m
+tmux send-keys -t rossim_mapping:sim.1 'source ~/ros_sim/devel/setup.bash && roslaunch ayuan_robot ayuan_robot_slam_sim.launch' C-m
 echo "please wait 1 seconds for next step.."
 sleep 1
 # echo "now start gazebo"
@@ -28,9 +28,9 @@ sleep 1
 # echo "please wait 1 seconds for next step.."
 # sleep 1
 echo "now start teleop_robot"
-tmux send-keys -t rossim_mapping:sim.3 'source hy_route/learn/ros_sim/devel/setup.bash && rosrun teleop_robot teleop_robot_key.py' C-m
+tmux send-keys -t rossim_mapping:sim.3 'source ~/ros_sim/devel/setup.bash && rosrun teleop_robot teleop_robot_key.py' C-m
 echo "please wait 1 seconds for next step.."
 sleep 1
-tmux send-keys -t rossim_mapping:gmapping.0 'source hy_route/learn/ros_sim/devel/setup.bash && roslaunch gmapping ayuan_slam_gmapping.launch' C-m
-tmux send-keys -t rossim_mapping:gmapping.1 'rosrun map_server map_saver -f hy_route/learn/ros_sim/src/ayuan_gazebo/map/<you_map_name>'
+tmux send-keys -t rossim_mapping:gmapping.0 'source ~/ros_sim/devel/setup.bash && roslaunch gmapping ayuan_slam_gmapping.launch' C-m
+tmux send-keys -t rossim_mapping:gmapping.1 'rosrun map_server map_saver -f ~/ros_sim/src/ayuan_gazebo/map/<you_map_name>'
 tmux a -t rossim_mapping:sim

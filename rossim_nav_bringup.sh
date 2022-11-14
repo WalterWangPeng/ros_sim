@@ -28,15 +28,15 @@ sleep 1
 # echo "please wait 1 seconds for next step.."
 # sleep 1
 echo "now start sim"
-tmux send-keys -t rossim_nav:sim.1 'source hy_route/learn/ros_sim/devel/setup.bash && roslaunch ayuan_robot ayuan_robot_nav_sim.launch' C-m
+tmux send-keys -t rossim_nav:sim.1 'source ~/ros_sim/devel/setup.bash && roslaunch ayuan_robot ayuan_robot_nav_sim.launch' C-m
 echo "please wait 1 seconds for next step.."
 sleep 1
 echo "now start teleop_robot"
-tmux send-keys -t rossim_nav:sim.3 'source hy_route/learn/ros_sim/devel/setup.bash && rosrun teleop_robot teleop_robot_key.py'
+tmux send-keys -t rossim_nav:sim.3 'source ~/ros_sim/devel/setup.bash && rosrun teleop_robot teleop_robot_key.py'
 echo "please wait 1 seconds for next step.."
 sleep 1
 # nav start
-tmux send-keys -t rossim_nav:nav.0 'source hy_route/learn/ros_sim/devel/setup.bash && roslaunch ayuan_robot ayuan_robot_nav.launch' C-m
+tmux send-keys -t rossim_nav:nav.0 'source ~/ros_sim/devel/setup.bash && roslaunch ayuan_robot ayuan_robot_nav.launch' C-m
 # echo "please wait 1 seconds for next step.."
 # sleep 1
 # tmux send-keys -t rossim_nav:nav.1 'source hy_route/learn/ros_sim/devel/setup.bash && roslaunch ayuan_robot ayuan_robot_nav_movebase.launch' C-m
