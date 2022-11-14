@@ -1,6 +1,6 @@
 <launch>
     <!-- Run the map server --> 
-   <arg name="map_file" default="$(find ayuan_gazebo)/map/home_1.yaml"/>
+   <arg name="map_file" default="$(find ayuan_gazebo)/map/home.yaml"/>
    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
    
    <arg name="use_map_topic" default="false"/>
