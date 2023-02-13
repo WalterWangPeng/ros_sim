@@ -9,4 +9,6 @@
 # base_local_planner: "dwa_local_planner/DWAPlannerROS"
 # base_global_planner: "global_planner/GlobalPlanner"
 base_global_planner: "global_planner/GlobalPlanner"
+GlobalPlanner:
+  use_dijkstra: false
 
