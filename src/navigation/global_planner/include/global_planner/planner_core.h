@@ -53,6 +53,9 @@
 #include <global_planner/orientation_filter.h>
 #include <global_planner/GlobalPlannerConfig.h>
 
+#include "global_planner/path_smoother/path_smoother.h"
+#include "global_planner/path_smoother/osqp_smoother.h"
+
 namespace global_planner {
 
 class Expander;
@@ -205,6 +208,13 @@ class GlobalPlanner : public nav_core::BaseGlobalPlanner {
         dynamic_reconfigure::Server<global_planner::GlobalPlannerConfig> *dsrv_;
         void reconfigureCB(global_planner::GlobalPlannerConfig &config, uint32_t level);
 
+        bool use_optimizer_;
+        std::string smoothing_method_;
+        double osqp_cost_smooth_;
+        double osqp_cost_length_;
+        double osqp_cost_ref_;
+        ros::Publisher plan_temp_pub_;
+        ros::Publisher plan_opt_pub_;
 };
 
 } //end namespace global_planner

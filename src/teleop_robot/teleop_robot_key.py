@@ -7,7 +7,7 @@ if os.name == 'nt':
 else:
   import tty, termios
 
-BURGER_MAX_LIN_VEL = 0.32
+BURGER_MAX_LIN_VEL = 1.0
 BURGER_MAX_ANG_VEL = 2.84
 
 WAFFLE_MAX_LIN_VEL = 0.26
@@ -24,7 +24,7 @@ Moving around:
    a    s    d
         x
 
-w/x : increase/decrease linear velocity (Burger : ~ 0.32, Waffle and Waffle Pi : ~ 0.26)
+w/x : increase/decrease linear velocity (Burger : ~ 1.0, Waffle and Waffle Pi : ~ 0.26)
 a/d : increase/decrease angular velocity (Burger : ~ 2.84, Waffle and Waffle Pi : ~ 1.82)
 
 space key, s : force stop

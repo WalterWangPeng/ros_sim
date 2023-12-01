@@ -86,6 +86,8 @@ void AStarExpansion::add(unsigned char* costs, float* potential, float prev_pote
 
     if(costs[next_i]>=lethal_cost_ && !(unknown_ && costs[next_i]==costmap_2d::NO_INFORMATION))
         return;
+    
+    //add collision 代价
 
     potential[next_i] = p_calc_->calculatePotential(potential, costs[next_i] + neutral_cost_, next_i, prev_potential);
     int x = next_i % nx_, y = next_i / nx_;

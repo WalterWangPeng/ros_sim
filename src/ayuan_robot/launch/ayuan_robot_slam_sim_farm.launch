@@ -1,0 +1,28 @@
+<launch>
+   <arg name="model" default="$(find ayuan_description)/urdf/ayuan.urdf"/>
+	<arg name="gui" default="true" />
+	<arg name="rvizconfig" default="$(find ayuan_description)/conf/ayuan_slam.rviz" />
+
+	<!-- <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" /> -->
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find ayuan_description)/urdf/ayuan.urdf'" />
+	<param name="use_gui" value="$(arg gui)"/>
+
+	<node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+   <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(find ayuan_gazebo)/worlds/farm.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+      <arg name="paused" value="false"/>
+      <arg name="use_sim_time" value="true"/>
+      <arg name="gui" value="true"/>
+      <arg name="headless" value="false"/> <!-- Inert - see gazebo_ros_pkgs issue #491 -->
+      <arg name="recording" value="false"/>
+      <arg name="debug" value="false"/>
+   </include>
+   <!-- Spawn a robot into Gazebo -->
+   <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-file $(find ayuan_description)/urdf/ayuan.urdf -urdf -z 1 -model ayuan" /> -->
+   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+            args="-urdf -model mrobot -param robot_description"/> 
+</launch> 

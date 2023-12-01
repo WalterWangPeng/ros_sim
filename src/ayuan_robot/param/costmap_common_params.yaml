@@ -2,7 +2,7 @@ obstacle_range: 2.5
 raytrace_range: 3.0
 # footprint: [[x0, y0], [x1, y1], ... [xn, yn]]
 # footprint: [[0.175, 0.175], [0.175, -0.175], [-0.175, -0.175], [-0.175, 0.175]]
-robot_radius: 0.2
+robot_radius: 0.25
 transform_tolerance: 0.2
 map_type: costmap
 
@@ -14,14 +14,14 @@ obstacle_layer:
   enabled: true
   obstacle_range: 2.5
   raytrace_range: 3.0
-  inflation_radius: 0.1
+  inflation_radius: 0.2
   track_unknow_space: false
   combination_method: 1
 
 inflation_layer:
   enabled: true 
   cost_scaling_factor: 10.0
-  inflation_radius: 0.1
+  inflation_radius: 0.2
 
 static_layer:
   enabled: true 

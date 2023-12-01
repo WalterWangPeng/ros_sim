@@ -8,7 +8,13 @@
 # recovery_behavior_enabled: false
 # base_local_planner: "dwa_local_planner/DWAPlannerROS"
 # base_global_planner: "global_planner/GlobalPlanner"
+base_local_planner: "dwa_local_planner/DWAPlannerROS"
 base_global_planner: "global_planner/GlobalPlanner"
 GlobalPlanner:
   use_dijkstra: false
+  use_optimizer: false
+  smoothing_method: "OSQP"
+  osqp_cost_smooth:  1000000.0
+  osqp_cost_length:  1.0
+  osqp_cost_ref:     1.0
 

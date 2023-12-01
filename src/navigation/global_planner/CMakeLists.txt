@@ -16,6 +16,9 @@ find_package(catkin REQUIRED
     tf2_ros
 )
 
+find_package(OsqpEigen REQUIRED)
+find_package(Eigen3 REQUIRED)
+
 generate_dynamic_reconfigure_options(
   cfg/GlobalPlanner.cfg
 )
@@ -48,9 +51,11 @@ add_library(${PROJECT_NAME}
   src/gradient_path.cpp
   src/orientation_filter.cpp
   src/planner_core.cpp
+  src/path_smoother/path_smoother.cpp
+  src/path_smoother/osqp_smoother.cpp
 )
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} OsqpEigen::OsqpEigen osqp::osqp)
 
 add_executable(planner
   src/plan_node.cpp

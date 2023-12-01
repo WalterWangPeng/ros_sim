@@ -136,6 +136,9 @@ void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
         orientation_filter_ = new OrientationFilter();
 
         plan_pub_ = private_nh.advertise<nav_msgs::Path>("plan", 1);
+        plan_temp_pub_ = private_nh.advertise<nav_msgs::Path>("plan_temp", 1);
+        plan_opt_pub_ = private_nh.advertise<nav_msgs::Path>("plan_opt", 1);
+
         potential_pub_ = private_nh.advertise<nav_msgs::OccupancyGrid>("potential", 1);
 
         private_nh.param("allow_unknown", allow_unknown_, true);
@@ -153,6 +156,12 @@ void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
                 &GlobalPlanner::reconfigureCB, this, _1, _2);
         dsrv_->setCallback(cb);
 
+        private_nh.param("use_optimizer", use_optimizer_, false);
+        std::string default_smoothing_method = "OSQP";
+        private_nh.param("smoothing_method", smoothing_method_, default_smoothing_method);
+        private_nh.param("osqp_cost_smooth", osqp_cost_smooth_, 1e10);
+        private_nh.param("osqp_cost_length", osqp_cost_length_, 1e1);
+        private_nh.param("osqp_cost_ref", osqp_cost_ref_, 1e1);
         initialized_ = true;
     } else
         ROS_WARN("This planner has already been initialized, you can't call it twice, doing nothing");
@@ -311,11 +320,47 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
     }else{
         ROS_ERROR("Failed to get a plan.");
     }
+    if(use_optimizer_){
+        double opt_start = ros::Time::now().toSec();
+        auto path_smoother = PathSmoother::create(smoothing_method_);
+        if(smoothing_method_ == "OSQP"){
+            nav_msgs::Path temp_path;
+            nav_msgs::Path opted_path;
+             //down sample plan
+            int sample_resolution = 0.2 / costmap_->getResolution() + 0.05; 
+            for(int i = 0; i < plan.size() - 1; i+=sample_resolution)
+            {
+                temp_path.poses.push_back(plan[i]);
+            }
+            temp_path.poses.push_back(plan[plan.size() - 1]);
+            temp_path.header.frame_id = frame_id_;
+            temp_path.header.stamp = ros::Time::now();
+            plan_temp_pub_.publish(temp_path);
+            opted_path = path_smoother->smootherPath(temp_path, osqp_cost_smooth_, osqp_cost_length_, osqp_cost_ref_);
+            opted_path.header.frame_id = frame_id_;
+            opted_path.header.stamp = ros::Time::now();
+            plan_opt_pub_.publish(opted_path);
 
+            geometry_msgs::PoseStamped planed_start = plan[0];
+            geometry_msgs::PoseStamped planed_goal =  plan[plan.size() - 1];
+            plan.clear();
+
+            for(int i = 0; i < temp_path.poses.size(); i++){
+                opted_path.poses[i].header = planed_start.header;
+                plan.push_back(opted_path.poses[i]);
+            }
+            plan[0]=planed_start;
+            plan[plan.size() - 1] = planed_goal;
+        }
+        else{
+            std::cout << "No such smoother" << std::endl;
+        }
+        double opt_end = ros::Time::now().toSec();
+        printf("path opt time %f\n", opt_end - opt_start);
+    }
     // add orientations if needed
     orientation_filter_->processPath(start, plan);
-
-    //publish the plan for visualization purposes
+    //publish the plan for visualization purpose
     publishPlan(plan);
     delete[] potential_array_;
     return !plan.empty();
